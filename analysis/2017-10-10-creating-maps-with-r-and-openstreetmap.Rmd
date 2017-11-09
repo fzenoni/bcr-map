@@ -107,6 +107,9 @@ rm(package_date)
 ```
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
+source("manifest.R")
+unlink("manifest.R")
+
 if(Sys.info()['sysname'] == 'Windows') { 
   if(!require(lwgeom)) {
     if (!require(devtools)) {
@@ -117,8 +120,6 @@ if(Sys.info()['sysname'] == 'Windows') {
     require(lwgeom)
   }
 }
-source("manifest.R")
-unlink("manifest.R")
 # sessionInfo()
 ```
 
@@ -212,11 +213,7 @@ municipalities <- st_transform(municipalities, 3812)
 bxl_region <- st_transform(bxl_region, 3812)
 # Fix the polygons before the intersection, or it will fail
 if(!all(st_is_valid(municipalities))) {
-  if(Sys.info()['sysname'] == 'Windows') {
-    municipalities <- municipalities %>% lwgeom::st_make_valid()
-  } else {
-    municipalities <- municipalities %>% st_make_valid()
-  }
+  municipalities <- municipalities %>% st_make_valid()
 }
 bxl_municipalities <- st_intersection(municipalities, bxl_region)
 # Select the polygons. The elements with an index greater than 19 are linestrings.
