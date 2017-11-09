@@ -18,7 +18,7 @@ slug: creating-maps-with-r-and-openstreetmap
 user_name <- "fzenoni" # your Git username (only needed if
 # you want to deploy to GH pages)
 project_name <- "bcr-map" # adapt!
-package_date <- "2017-10-09" # date of the CRAN snapshot that
+package_date <- "2017-11-09" # date of the CRAN snapshot that
 # the checkpoint package uses
 ```
 
@@ -36,12 +36,12 @@ detach_all_packages <- function() {
                              "methods",
                              "base")
   basic_packages <- paste("package:", basic_packages_blank, sep = "")
-
+  
   package_list <- search()[
     ifelse(unlist(gregexpr("package:", search())) == 1, TRUE, FALSE)]
-
+  
   package_list <- setdiff(package_list, basic_packages)
-
+  
   if (length(package_list) > 0)  for (package in package_list) {
     detach(package, character.only = TRUE, unload = TRUE)
     print(paste("package ", package, " detached", sep = ""))
@@ -72,7 +72,8 @@ library(dplyr)
 library(knitr)
 library(osmdata)
 library(sf)
-library(tmap)",
+library(tmap)
+library(devtools)",
 file = "manifest.R")
 ```
 
@@ -107,6 +108,16 @@ rm(package_date)
 ```
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
+if(Sys.info()['sysname'] == 'Windows') { 
+  if(!require(lwgeom)) {
+    if (!require(devtools)) {
+      install.packages("devtools", repos = "http://cran.us.r-project.org")
+      require(devtools)
+    }
+    devtools::install_github('r-spatial/lwgeom')
+    require(lwgeom)
+  }
+}
 source("manifest.R")
 unlink("manifest.R")
 # sessionInfo()
@@ -202,7 +213,11 @@ municipalities <- st_transform(municipalities, 3812)
 bxl_region <- st_transform(bxl_region, 3812)
 # Fix the polygons before the intersection, or it will fail
 if(!all(st_is_valid(municipalities))) {
-  municipalities <- municipalities %>% st_make_valid()
+  if(Sys.info()['sysname'] == 'Windows') {
+    municipalities <- municipalities %>% lwgeom::st_make_valid()
+  } else {
+    municipalities <- municipalities %>% st_make_valid()
+  }
 }
 bxl_municipalities <- st_intersection(municipalities, bxl_region)
 # Select the polygons. The elements with an index greater than 19 are linestrings.
