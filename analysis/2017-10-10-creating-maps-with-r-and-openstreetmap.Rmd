@@ -72,8 +72,7 @@ library(dplyr)
 library(knitr)
 library(osmdata)
 library(sf)
-library(tmap)
-library(devtools)",
+library(tmap)",
 file = "manifest.R")
 ```
 
