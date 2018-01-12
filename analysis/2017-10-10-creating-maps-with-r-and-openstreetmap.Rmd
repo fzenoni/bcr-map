@@ -119,18 +119,6 @@ rm(package_date)
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 source("manifest.R")
 unlink("manifest.R")
-
-# if(Sys.info()['sysname'] == 'Windows') { 
-#   if(!require(lwgeom)) {
-#     if (!require(devtools)) {
-#       install.packages("devtools", repos = "http://cran.us.r-project.org")
-#       require(devtools)
-#     }
-#     devtools::install_github('r-spatial/lwgeom')
-#     require(lwgeom)
-#   }
-# }
-# sessionInfo()
 ```
 
 
