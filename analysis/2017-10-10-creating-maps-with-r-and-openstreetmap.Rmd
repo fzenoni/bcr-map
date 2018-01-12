@@ -66,14 +66,24 @@ if ( is.null(path_to_wd) | !dir.exists(path_to_wd)) {
 # from https://mran.revolutionanalytics.com/web/packages/checkpoint/vignettes/using-checkpoint-with-knitr.html
 # if you don't need a package, remove it from here (commenting is probably not sufficient)
 # tidyverse: see https://blog.rstudio.org/2016/09/15/tidyverse-1-0-0/
-cat("
-library(backports)
+if(Sys.info()['sysname'] == 'Windows') { 
+  cat("
+library(dplyr)
+library(knitr)
+library(osmdata)
+library(sf)
+library(tmap)
+library(lwgeom)",
+file = "manifest.R")
+} else {
+  cat("
 library(dplyr)
 library(knitr)
 library(osmdata)
 library(sf)
 library(tmap)",
 file = "manifest.R")
+}
 ```
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
@@ -110,16 +120,16 @@ rm(package_date)
 source("manifest.R")
 unlink("manifest.R")
 
-if(Sys.info()['sysname'] == 'Windows') { 
-  if(!require(lwgeom)) {
-    if (!require(devtools)) {
-      install.packages("devtools", repos = "http://cran.us.r-project.org")
-      require(devtools)
-    }
-    devtools::install_github('r-spatial/lwgeom')
-    require(lwgeom)
-  }
-}
+# if(Sys.info()['sysname'] == 'Windows') { 
+#   if(!require(lwgeom)) {
+#     if (!require(devtools)) {
+#       install.packages("devtools", repos = "http://cran.us.r-project.org")
+#       require(devtools)
+#     }
+#     devtools::install_github('r-spatial/lwgeom')
+#     require(lwgeom)
+#   }
+# }
 # sessionInfo()
 ```
 
