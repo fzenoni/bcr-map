@@ -69,7 +69,6 @@ if ( is.null(path_to_wd) | !dir.exists(path_to_wd)) {
 if(Sys.info()['sysname'] == 'Windows') { 
   cat("
 library(dplyr)
-library(knitr)
 library(osmdata)
 library(sf)
 library(tmap)
@@ -78,7 +77,6 @@ file = "manifest.R")
 } else {
   cat("
 library(dplyr)
-library(knitr)
 library(osmdata)
 library(sf)
 library(tmap)",
@@ -175,7 +173,7 @@ But this is not good either! Indeed, let's have a look at the original dataset. 
 table <- municipalities
 # Remove geometry from table
 st_geometry(table) <- NULL
-kable(head(table[, c('name', 'addr.postcode')]))
+knitr::kable(head(table[, c('name', 'addr.postcode')]))
 ```
 
 ### Other boundaries to the rescue
